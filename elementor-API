@@ -18,7 +18,7 @@ add_action( 'elementor_pro/forms/new_record', function( $record, $handler ) {
         $fields[ $id ] = $field['value'];
     }
    $data = json_encode(array(
-	  "field" => $fields,
+	  "body" => $fields,
       ));
 
  // Replace HTTP://YOUR_WEBHOOK_URL with the actuall URL you want to post the form to
