@@ -1,0 +1,58 @@
+/**
+ * SEND CF7 API
+ */
+add_action( 'wpcf7_before_send_mail', 'my_conversion' );
+   function my_conversion( $contact_form ) {
+   $submission = WPCF7_Submission::get_instance();
+ if ( isset($_POST['_wpcf7']) && $_POST['_wpcf7'] != 17) // Only form id 17 will be validated.
+        return $result;
+  // Get the post data and other post meta values
+if ( $submission ) {
+    $posted_data = $submission->get_posted_data();
+    $remote_ip = $submission->get_meta( 'remote_ip' );
+    $url = $submission->get_meta( 'url' );
+    $timestamp = gmdate("Y-m-d H:i:s", $submission->get_meta( 'timestamp' ));
+    $title = wpcf7_special_mail_tag( '', '_post_title', '' );
+    
+  // Exclude any email addresses (eg: email addresses you use to test forms)
+if ( !in_array($posted_data["your-email"], array('testingemail@domain.com','anotheremail@domain.com','blacklistedemail@domain.com'), true ) ) { 
+  
+  // Split the first and last names
+    if ($posted_data["your-name"]){
+    $name = trim($posted_data["your-name"]);
+    $last_name = (strpos($name, ' ') === false) ? '' : preg_replace('#.*\s([\w-]*)$#', '$1', $name);
+    $first_name = trim( preg_replace('#'.$last_name.'#', '', $name ) );
+  
+  // Set default value for last name if none is provided   
+      if ($last_name == NULL ){
+      $last_name = "Not Provided";
+      }
+    }
+
+  // Encode the data in a new array in JSON format
+  $data = json_encode(array(
+      "naem" => "{$posted_data["your-name"]}",
+      "email" => "{$posted_data["your-email"]}",
+      "subject" => "{$posted_data["your-subject"]}",
+      "message" => "{$posted_data["your-message"]}",
+      "Submitted" => "$timestamp",
+      "From URL" => "$url",
+      "From IP" => "$remote_ip",
+      "Page Title" => "$title"
+      ));
+
+   // Finally send the data to Zapier or your other webhook endpoint
+        $ch = curl_init("WEBHOOKֹ_URL"); // replace with your url webook
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+        curl_setopt( $ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json'));
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT ,5); //Optional timeout value
+        curl_setopt($ch, CURLOPT_TIMEOUT, 5); //Optional timeout value
+        $result = curl_exec($ch);
+        curl_close($ch);
+        
+    return;
+      }
+    }
+  }
