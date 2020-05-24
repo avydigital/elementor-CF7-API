@@ -42,7 +42,7 @@ if ( !in_array($posted_data["your-email"], array('testingemail@domain.com','anot
       ));
 
    // Finally send the data to Zapier or your other webhook endpoint
-        $ch = curl_init("WEBHOOKֹ_URL"); // replace with your url webook
+        $ch = curl_init("HTTP://YOUR_WEBHOOK_URL"); // replace with your url webook
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
         curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
         curl_setopt( $ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json'));
