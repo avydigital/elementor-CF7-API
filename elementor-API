@@ -22,7 +22,7 @@ add_action( 'elementor_pro/forms/new_record', function( $record, $handler ) {
       ));
 
  // Replace HTTP://YOUR_WEBHOOK_URL with the actuall URL you want to post the form to
-         $ch = curl_init("https://webhook.site/8e5bae1f-ec5f-4133-b848-7138eff30ac7"); // replace with your Zapier webook
+         $ch = curl_init("HTTP://YOUR_WEBHOOK_URL"); // replace with your Zapier webook
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
         curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
         curl_setopt( $ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json'));
